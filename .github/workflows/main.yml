@@ -14,13 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: show vars
-        shell: bash
-        run: |
-          echo $API_IMG
-          echo $GITHUB_SHA
-          echo "$API_IMG:$GITHUB_SHA"
-          echo "${API_IMG}:${GITHUB_SHA}"
-          echo "${{API_IMG}}:${{GITHUB_SHA}}"
+        run: echo $API_IMG
+      - name: show vars2
+        run: echo $GITHUB_SHA
+      - name: show vars3
+        run: echo "$API_IMG:$GITHUB_SHA"
+      - name: show vars4
+        run: echo "${API_IMG}:${GITHUB_SHA}"
       - name: Build docker image
         run: docker build -t $API_IMG .
       - name: Docker login
