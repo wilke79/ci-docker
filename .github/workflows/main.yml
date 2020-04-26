@@ -6,7 +6,7 @@ on:
     branches: [ master ]
 
 env:
-  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
+  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api"
 
 jobs:
   build:
@@ -22,10 +22,10 @@ jobs:
       - name: show vars4
         run: echo "${API_IMG}:${GITHUB_SHA}"
       - name: Build docker image
-        run: docker build -t $API_IMG .
+        run: docker build -t "${API_IMG}:${GITHUB_SHA}" .
       - name: Docker login
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Push image to GitHub
-        run: docker push $API_IMG
+        run: docker push "${API_IMG}:${GITHUB_SHA}" .
