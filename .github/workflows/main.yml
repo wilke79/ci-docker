@@ -22,6 +22,7 @@ jobs:
       - name: Push image to GitHub
         run: docker push "${API_IMG}:${GITHUB_SHA}"
   test:
+    needs: build
     runs-on: ubuntu-latest
     services:
       api:
@@ -36,6 +37,7 @@ jobs:
           npm test
   publish:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Docker login
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
