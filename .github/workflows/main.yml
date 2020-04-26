@@ -6,15 +6,17 @@ on:
     branches: [ master ]
 
 jobs:
+  env:
+    API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:$GITHUB_SHA"
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build docker image
-        run: docker build -t "docker.pkg.github.com/git-buch/api:$GITHUB_SHA" .
+        run: docker build -t $API_IMG .
       - name: Docker login
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Push image to GitHub
-        run: docker push "docker.pkg.github.com/git-buch/ci-docker/api:$GITHUB_SHA"
+        run: docker push $API_IMG
