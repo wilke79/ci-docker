@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "mocha": "^7.1.2",
     "nodemon": "^2.0.3",
     "request": "^2.88.2"
@@ -22,7 +23,7 @@
   "scripts": {
     "start": "node server.js",
     "devStart": "DEBUG='*' nodemon server.js",
-    "test": "mocha test/*"
+    "test": "mocha --exit"
   },
   "author": "",
   "license": "ISC",

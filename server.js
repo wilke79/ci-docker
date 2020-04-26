@@ -15,3 +15,5 @@ app.use('/api', routes);
 app.listen(port, () => {
   console.log("API-Server auf Port ", port);
 });
+
+module.exports = app;  // for mocha/chai tests

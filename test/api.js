@@ -1,9 +1,21 @@
-var expect  = require('chai').expect;
-var request = require('request');
+let chai = require('chai');
+let chaiHttp = require('chai-http');
+let server = require('../server.js');
+let should = chai.should();
 
-it('API with status 200', function(done) {
-    request('http://localhost:3001' , function(error, response, body) {
-        expect(response.statusCode).to.equal(200);
+
+chai.use(chaiHttp);
+
+describe('/GET pictures', () => {
+  it('it should GET all pictures', (done) => {
+    chai.request(server)
+      .get('/api/pictures')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.data.should.be.a('array');
+        res.body.data.length.should.be.eql(2);
         done();
-    });
+      });
+  });
 });
+

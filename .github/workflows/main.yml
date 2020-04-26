@@ -6,46 +6,43 @@ on:
     branches: [ master ]
 
 env:
-  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api"
+  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:latest"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build docker image
-        run: docker build -t "${API_IMG}:${GITHUB_SHA}" .
-      - name: Docker login
-        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Push image to GitHub
-        run: docker push "${API_IMG}:${GITHUB_SHA}"
   test:
-    needs: build
     runs-on: ubuntu-latest
-    services:
-      api:
-        image: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
-        ports:
-          - 3001:3001
     steps:
       - uses: actions/checkout@v2
       - name: test running container
         run: |
           npm install
           npm test
+# this would be the way to go, but github docker reg cannot load images without
+# basic auth, which is crazy: https://github.community/t5/GitHub-Actions/docker-pull-from-public-GitHub-Package-Registry-fail-with-quot/m-p/54965/highlight/true#M9374
+  # test:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     api:
+  #       image: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
+  #       ports:
+  #         - 3001:3001
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: test running container
+  #       run: |
+  #         npm install
+  #         npm test
   publish:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: docker build -t "${API_IMG}" .
       - name: Docker login
         run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Build docker image
-        run: |
-          docker pull "${API_IMG}:${GITHUB_SHA}"
-          docker tag "${API_IMG}:latest" "${API_IMG}:${GITHUB_SHA}"
-          docker push "${API_IMG}:latest"
-
+        run: docker push "${API_IMG}"
