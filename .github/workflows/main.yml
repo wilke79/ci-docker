@@ -5,9 +5,10 @@ on:
   push:
     branches: [ master ]
 
+env:
+  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:$GITHUB_SHA"
+
 jobs:
-  env:
-    API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:$GITHUB_SHA"
   build:
     runs-on: ubuntu-latest
     steps:
