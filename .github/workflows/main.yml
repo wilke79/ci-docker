@@ -13,14 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: show vars
-        run: echo $API_IMG
-      - name: show vars2
-        run: echo $GITHUB_SHA
-      - name: show vars3
-        run: echo "$API_IMG:$GITHUB_SHA"
-      - name: show vars4
-        run: echo "${API_IMG}:${GITHUB_SHA}"
       - name: Build docker image
         run: docker build -t "${API_IMG}:${GITHUB_SHA}" .
       - name: Docker login
@@ -28,4 +20,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Push image to GitHub
-        run: docker push "${API_IMG}:${GITHUB_SHA}" .
+        run: docker push "${API_IMG}:${GITHUB_SHA}"
+  test:
+    runs-on: ubuntu-latest
+    services:
+      api:
+        image: "${API_IMG}:${GITHUB_SHA}"
+        ports: 3001:3001
+    steps:
+      - uses: actions/checkout@v2
+      - name: test running container
+        run: |
+          npm install
+          npm test
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker login
+        run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Build docker image
+        run: |
+          docker pull "${API_IMG}:${GITHUB_SHA}"
+          docker tag "${API_IMG}:latest" "${API_IMG}:${GITHUB_SHA}"
+          docker push "${API_IMG}:latest"
+
