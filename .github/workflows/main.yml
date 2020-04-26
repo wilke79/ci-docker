@@ -6,7 +6,7 @@ on:
     branches: [ master ]
 
 env:
-  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:"$GITHUB_SHA
+  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
 
 jobs:
   build:
