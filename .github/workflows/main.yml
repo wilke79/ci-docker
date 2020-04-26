@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       api:
-        image: "${API_IMG}:${GITHUB_SHA}"
+        image: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
         ports:
           - 3001:3001
     steps:
