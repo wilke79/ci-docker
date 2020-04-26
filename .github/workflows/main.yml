@@ -6,13 +6,20 @@ on:
     branches: [ master ]
 
 env:
-  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:${GITHUB_SHA}"
+  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: show vars:
+        run: |
+          echo $API_IMG
+          echo $GITHUB_SHA
+          echo "$API_IMG:$GITHUB_SHA"
+          echo "${API_IMG}:${GITHUB_SHA}"
+          echo "${{API_IMG}}:${{GITHUB_SHA}}"
       - name: Build docker image
         run: docker build -t $API_IMG .
       - name: Docker login
