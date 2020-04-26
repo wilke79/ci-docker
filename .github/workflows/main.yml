@@ -26,7 +26,8 @@ jobs:
     services:
       api:
         image: "${API_IMG}:${GITHUB_SHA}"
-        ports: 3001:3001
+        ports:
+          - 3001:3001
     steps:
       - uses: actions/checkout@v2
       - name: test running container
