@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       api:
-        image: ${API_IMG}
+        image: "${API_IMG}"
         ports:
           - 3001:3001
     steps:
