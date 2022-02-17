@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 
 fixture `Webpage`
-  .page('http://api:3001/')
+  .page('http://localhost:3001/')
 
 test(`Startseite H1`, async t => {
   const h1 = Selector("h1");
