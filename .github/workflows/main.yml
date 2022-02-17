@@ -44,5 +44,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Tag docker image
         run: |
-          echo "your variables: ${API_IMG_TEST} ${API_IMG_STABLE}"
+          echo "your images: ${API_IMG_TEST} ${API_IMG_STABLE}"
+          docker pull "${API_IMG_TEST}"
           docker tag "${API_IMG_TEST}" "${API_IMG_STABLE}"
+          docker push "${API_IMG_STABLE}"
