@@ -3,36 +3,36 @@ name: CI/CD with docker
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
-  API_IMG: "docker.pkg.github.com/git-buch/ci-docker/api:latest"
+  API_IMG: "ghcr.io/git-compendium/ci-docker/api:latest"
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: docker build -t "${API_IMG}" .
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push docker image
+        run: docker push "${API_IMG}"
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    services:
+      api:
+        image: ${API_IMG}
+        ports:
+          - 3001:3001
     steps:
       - uses: actions/checkout@v2
       - name: test running container
         run: |
           npm install
           npm test
-# this would be the way to go, but github docker reg cannot load images without
-# basic auth, which is crazy: https://github.community/t5/GitHub-Actions/docker-pull-from-public-GitHub-Package-Registry-fail-with-quot/m-p/54965/highlight/true#M9374
-  # test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     api:
-  #       image: "docker.pkg.github.com/git-buch/ci-docker/api:beta"
-  #       ports:
-  #         - 3001:3001
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: test running container
-  #       run: |
-  #         npm install
-  #         npm test
   publish:
     runs-on: ubuntu-latest
     needs: test
