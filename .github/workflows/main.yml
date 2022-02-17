@@ -24,7 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     services:
       api:
-        image: "${API_IMG}"
+        # stupid: cannot be a variable name
+        image: ghcr.io/git-compendium/ci-docker/api:latest
         ports:
           - 3001:3001
     steps:
