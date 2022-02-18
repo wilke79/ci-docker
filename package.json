@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node server.js",
     "devStart": "DEBUG='*' nodemon -i pictures.db -i pictures.db-journal server.js",
-    "test": "testcafe chrome:headless test/e2e.js"
+    "test": "testcafe firefox:headless test/e2e.js"
   },
   "author": "",
   "license": "ISC",
