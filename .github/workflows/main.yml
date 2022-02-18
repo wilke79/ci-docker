@@ -25,8 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       api:
-        # stupid: cannot be a variable name
-        image: ghcr.io/git-compendium/ci-docker/api:test
+        image: "${API_IMG_TEST}"
         ports:
           - 3001:3001
     steps:
@@ -39,7 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v2
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Tag docker image
