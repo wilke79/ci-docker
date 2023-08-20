@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 env:
-  API_IMG_TEST: "ghcr.io/git-compendium/ci-docker/api:test"
-  API_IMG_STABLE: "ghcr.io/git-compendium/ci-docker/api:latest"
+  API_IMG_TEST: "ghcr.io/wilke79/ci-docker/api:test"
+  API_IMG_STABLE: "ghcr.io/wilke79/ci-docker/api:latest"
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       api:
-        image: ghcr.io/git-compendium/ci-docker/api:test
+        image: ghcr.io/wilke79/ci-docker/api:test
         ports:
           - 3001:3001
     steps:
