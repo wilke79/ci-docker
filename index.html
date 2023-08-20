@@ -14,6 +14,7 @@
 
 <body>
   <h1>Simple picture db</h1>
+  <p>Easily manage your pictures</p>
   <input type="file" name="file" onchange="uploadPic()">
   <ul id="pics"></ul>
   <script>
@@ -28,7 +29,7 @@
           method: 'POST',
           body: formData
         })
-        .then(data => {
+        .then(_ => {
           fetchPics();
         });
     }
@@ -51,7 +52,7 @@
               fetch(`/api/picture/${pic.id}`, {
                   method: 'DELETE'
                 })
-                .then(data => fetchPics());
+                .then(_ => fetchPics());
             };
             deleteButton.innerHTML = 'Delete';
             let picDate = new Date(pic.date * 1000);
